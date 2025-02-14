@@ -11,6 +11,8 @@ import {
 export const AuthLayout = ({children, title =""}) => {
   return (
     <Grid
+    
+      item="true"
       container
       spacing={0}
       direction="column"

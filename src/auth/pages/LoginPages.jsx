@@ -1,41 +1,43 @@
 import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
-import {Box,Button,Grid2 as Grid,Link,TextField,Typography,} from "@mui/material";
+import {Alert, Box,Button,Grid2 as Grid,Link,TextField,Typography,} from "@mui/material";
 import { Google} from "@mui/icons-material";
 
 import { AuthLayout } from "../layout/AuthLayout";
 
 import { useForm } from "../../hooks";
-import { checkingAuthentication, startGoogleSignIn } from "../../store/auth";
+import { checkingAuthentication, startGoogleSignIn, startLoginWithEmailPassword } from "../../store/auth";
 import { singaInWithGoogle } from "../../firebase/provider";
 
 export const LoginPages = () => {
 
 
-  const {status} = useSelector( state=> state.auth )
+  const {status, errorMessage} = useSelector( state=> state.auth )
 
   const dispatch = useDispatch();
-  const { email, password, onInputChange } = useForm({
-    email: "ezeq15@gmail.com",
-    password: "1234455",
-  });
+  const { email, password, onInputChange, 
+        formState, displayNameValid, emailValid, passwordValid  
+       } = useForm( );
 
   const isAuthenticating = useMemo( ()=> status === "checking", [status])
 
   const onSubmit = (event) => {
     event.preventDefault();
-    dispatch(checkingAuthentication());
+    //!Esta no es la funcion a actualizar 
+    // dispatch(checkingAuthentication());
+    dispatch(startLoginWithEmailPassword({email, password}))
   };
 
   const onGoogleSignIn = () => {
     console.log("onGoogleSignIn");
     dispatch(startGoogleSignIn());
   };
+  
 
   return (
     <AuthLayout title="Login">
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} className="animate__animated animate__fadeIn anime__faster">
         <Grid container>
           <Grid item="true" size={{ xs: 12 }} sx={{ mt: 2 }}>
             <TextField
@@ -60,6 +62,17 @@ export const LoginPages = () => {
               onChange={onInputChange}
             />
           </Grid>
+          <Grid 
+              container
+              display={ !!errorMessage ? '': 'none' }
+              sx={{ mt: 1 }}>
+              <Grid 
+                  item 
+                  xs={ 12 }
+                >
+                <Alert severity='error'>{ errorMessage }</Alert>
+              </Grid>
+            </Grid>
 
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2} sx={{ mt: 2, mb: 2 }}>
