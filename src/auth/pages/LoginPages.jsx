@@ -10,15 +10,17 @@ import { useForm } from "../../hooks";
 import { checkingAuthentication, startGoogleSignIn, startLoginWithEmailPassword } from "../../store/auth";
 import { singaInWithGoogle } from "../../firebase/provider";
 
+const formData = { 
+  email:" ",
+  password:""
+}
 export const LoginPages = () => {
 
 
   const {status, errorMessage} = useSelector( state=> state.auth )
 
   const dispatch = useDispatch();
-  const { email, password, onInputChange, 
-        formState, displayNameValid, emailValid, passwordValid  
-       } = useForm( );
+  const { email, password, onInputChange } = useForm(formData);
 
   const isAuthenticating = useMemo( ()=> status === "checking", [status])
 
