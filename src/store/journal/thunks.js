@@ -15,6 +15,7 @@ export const startNewNote = () =>{
         const newNote = {
             title: "  ",
             body:  "  ",
+            imageUrls: [],
             date:  new Date().getTime(),
 
         }
@@ -89,7 +90,7 @@ export const startDeletingNote = () => {
         const {uid} = getState().auth;
         const {active: note} = getState().journal;
 
-        const docRef = doc( FirebaseDB, ` ${uid}/journal/notes ${ note.id }` );
+        const docRef = doc( FirebaseDB, ` ${uid}/journal/notes/ ${ note.id }` );
         await deleteDoc(docRef);
 
         dispatch( deleteNoteById(note.id) )
